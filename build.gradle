@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.github.jitpack'
+
+sourceCompatibility = 1.8 // java 8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile 'com.google.guava:guava:18.0'
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.9'
+  compile group: 'org.webjars.npm', name: 'async', version: '1.5.0'
+  compile group: 'org.apache.commons', name: 'commons-compress', version: '1.11'
+  compile group: 'io.netty', name: 'netty-codec-http', version: '4.1.39.Final'
+  compile group: 'org.yaml', name: 'snakeyaml', version: '1.19'
+  compile group: 'commons-codec', name: 'commons-codec', version: '1.8'
+  compile group: 'org.codehaus.plexus', name: 'plexus-utils', version: '2.0.3'
+  compile group: 'org.apache.struts', name: 'struts2-core', version: '2.0.5'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// To specify a license in the pom:
+install {
+  repositories.mavenInstaller {
+    pom.project {
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }
+}
+
+wrapper {
+    gradleVersion = "5.1.1"
+    distributionType = Wrapper.DistributionType.ALL
+}
